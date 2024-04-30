@@ -1,0 +1,53 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laravel OpenApi Demo Documentation",
+        "description": "L5 Swagger OpenApi description",
+        "contact": {
+            "name": "DIONOU Sinali",
+            "url": "https://dionousinali.com",
+            "email": "admin@admin.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://my-default-host.com",
+            "description": "Demo API Server"
+        }
+    ],
+    "paths": {
+        "/Register": {
+            "get": {
+                "tags": [
+                    "Autentification"
+                ],
+                "description": "API Endpoint pour la création d'un compte utilisateur: Parent, Eleve, Enseignant",
+                "operationId": "7ecd7c28fcfcd716e0ae2749140be51b",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/projects": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "description": "API Endpoints of Projects",
+                "operationId": "7f63a8e15c714cabd5403e3da5595599",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        }
+    }
+}
