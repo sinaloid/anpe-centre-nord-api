@@ -11,23 +11,23 @@ use OpenApi\Attributes as OA;
  /**
      * @OA\Info(
      *      version="1.0.0",
-     *      title="Laravel OpenApi Demo Documentation",
-     *      description="L5 Swagger OpenApi description",
+     *      title="ANPE CENTRE NORD API",
+     *      description="Bienvenue dans la documentation de l'API de l'ANPE CENTRE NORD.<br>Cette API fournit un accès sécurisé aux fonctionnalités du backend, <br>permettant la gestion efficace des ressources liées à l'emploi, aux utilisateurs et aux données associées.",
      *      @OA\Contact(
-     *          name="DIONOU Sinali",
+     *          name="SYMBOL SARL",
      *          email="admin@admin.com",
-     *          x="+226 75 63 82 03",
-     *          url="https://dionousinali.com"
      *      ),
-     *      @OA\License(
-     *          name="Apache 2.0",
-     *          url="http://www.apache.org/licenses/LICENSE-2.0.html"
-     *      )
      * )
+     *    @OA\SecurityScheme(
+    *     type="http",
+    *     securityScheme="bearerAuth",
+    *     scheme="bearer",
+    *     bearerFormat="JWT"
+    * )
      *
      * @OA\Server(
      *      url=L5_SWAGGER_CONST_HOST,
-     *      description="Demo API Server"
+     *      description="Serveur test de l'API"
      * )
 
      *
@@ -36,22 +36,5 @@ use OpenApi\Attributes as OA;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    /**
-     * @OA\Get(
-     *      tags={"Projects"},
-     *      description="API Endpoints of Projects",
-     *      path="/projects",
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *      ),
-     *     @OA\PathItem (
-     *     )
-     * )
-     */
-
-     public function projets(){
-
-        return null;
-     }
+    
 }

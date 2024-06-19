@@ -18,10 +18,27 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        "nom",
+        "prenom",
+        "date_de_naissance",
+        "genre",
+        "telephone",
+        "profile",
+        "matricule",
+        "slug",
+        "email",
+        "auth2FA",
+        "two_factor_is_active",
+        "two_factor_code",
+        "two_factor_expires_at",
+        "is_active",
+        "is_blocked",
+        "is_deleted",
+        "telephone_verified_at",
+        "email_verified_at",
+        "password",
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -41,4 +58,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function generateTwoFactorCode()
+    {
+        $this->two_factor_code = rand(100000, 999999);
+        $this->two_factor_expires_at = now()->addMinutes(10);
+        $this->save();
+    }
+
+    public function resetTwoFactorCode()
+    {
+        $this->two_factor_code = null;
+        $this->two_factor_expires_at = null;
+        $this->save();
+    }
+
 }
