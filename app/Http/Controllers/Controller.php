@@ -36,5 +36,5 @@ use OpenApi\Attributes as OA;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    
+
 }
