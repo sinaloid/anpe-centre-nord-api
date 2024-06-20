@@ -315,7 +315,7 @@ class AuthController extends Controller
                 $user->generateTwoFactorCode();
                 $user->notify(new TwoFactorCode());
 
-                return response()->json(['message' => 'Le code 2FA a été envoyé à votre adresse email']);
+                return response()->json(['message' => 'Le code 2FA a été envoyé à votre adresse email', "user" => null, 'access_token' => null]);
                 //return response()->json(['errors' => "Votre email n'a pas été validé, veuillez valider votre email avant de pouvoir continuer"], 401);
             }
 
