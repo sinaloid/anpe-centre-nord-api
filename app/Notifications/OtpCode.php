@@ -45,10 +45,10 @@ class OtpCode extends Notification
     {
         return (new MailMessage)
                     ->subject('Vérification de votre compte')
-                    ->line('Votre code de vérification est : ' . $this->otp)
+                    ->line('Votre code de vérification est : ' . $this->otp["code"])
                     ->line('Le code expirera dans 10 minutes.')
                     ->line('Si vous n\'avez pas demandé ce code, veuillez ignorer cet email.')
-                    ->action('Vérifiez votre compte', url('/verify-otp'));
+                    ->action('Vérifiez votre compte', 'https://anpe.netlify.app/validation-du-code-otp/'.$this->otp['slug'].'/'.$this->otp['code']);
     }
 
     /**

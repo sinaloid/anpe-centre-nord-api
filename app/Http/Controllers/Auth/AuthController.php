@@ -118,7 +118,7 @@ class AuthController extends Controller
             }
 
             $token = null;//$user->createToken('my-app-token')->accessToken;
-            $user->notify(new OtpCode($response->code));
+            $user->notify(new OtpCode(["slug" => $user->slug, "code" => $response->code]));
 
             return response()->json(['message' => "Votre compte a été créé. Un code de vérification a été envoyé à votre adresse email.",'data' => $user, 'access_token' => $token],200);
 
@@ -168,6 +168,11 @@ class AuthController extends Controller
 
     public function verifyOtp(Request $request){
 
+        $user = User::where('slug',$request->slug)->first();
+        if($user){
+            $request['email'] = $user->email;
+        }
+
         $otpController = app(OtpController::class);
         $response = $otpController->verifyEmailOTP($request);
 
@@ -216,6 +221,11 @@ class AuthController extends Controller
 
      public function getOtp(Request $request){
 
+        $user = User::where('slug',$request->slug)->first();
+        if($user){
+            $request['email'] = $user->email;
+        }
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
         ]);
@@ -234,7 +244,7 @@ class AuthController extends Controller
         $response = $otpController->generateOTP($request);
         $response = $response->getData();
 
-        $user->notify(new OtpCode($response->code));
+        $user->notify(new OtpCode(["slug" => $user->slug, "code" => $response->code]));
         return $response;
     }
 
@@ -304,7 +314,7 @@ class AuthController extends Controller
 
             // Vérifier si l'email est vérifié
             if (!$user->email_verified_at) {
-                return response()->json(['errors' => "Votre email n'a pas été validé, veuillez valider votre email avant de pouvoir continuer"], 401);
+                return response()->json(['errors' => "Votre email n'a pas été validé, veuillez valider votre email avant de pouvoir continuer", 'user' => $user], 401);
             }
 
             if ($user->is_blocked) {
@@ -362,6 +372,10 @@ class AuthController extends Controller
      */
     public function verify2fa(Request $request)
     {
+        $user = User::where('slug', $request->slug)->first();
+        if($user){
+            $request['email'] = $user->email;
+        }
         $request->validate([
             'email' => [
                 'required',
@@ -377,11 +391,12 @@ class AuthController extends Controller
                     ->where('two_factor_code', $request->code)
                     ->where('two_factor_expires_at', '>', now())
                     ->first();
+        //return $user;
 
         if ($user) {
             $user->resetTwoFactorCode();
 
-            $token = $token = $user->createToken('my-app-token')->accessToken;
+            $token = $user->createToken('my-app-token')->accessToken;
 
             return response()->json(["message" => "Connexion réussi avec succès", 'user' => $user, 'access_token' => $token],200);
         }
@@ -631,6 +646,55 @@ class AuthController extends Controller
             !preg_match('/^[A-Z]{3}-[0-9]{2}-[0-9]{4}$/', $value)) {
             $fail('Le ' . $attribute . ' doit être un email valide, un numéro de téléphone à 8 chiffres, ou un numéro matricule de type XXX-XX-XXXX.');
         }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/users/profile/{profile}",
+     *     summary="Retourne la liste des utlisateurs en fonctions d'un profile",
+     *     description="Retourne la liste des utilisateurs d'un profile",
+     *     tags={"Users"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="'Utilisateurs trouvés"),
+     *             @OA\Property(property="data", type="object")
+     *         ),
+     *     ),
+     *      @OA\Parameter(
+     *          name="profile",
+     *          in="path",
+     *          description="pofile des utilisateurs à récupérer",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Les données fournies ne sont pas valides."),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     ),
+     *     security={{"bearerAuth":{}}}
+     * )
+     */
+    public function usersByProfile(Request $request)
+    {
+        $data = User::where([
+            "is_deleted" => false,
+            "profile" => $request->profile
+        ])->get();
+
+        if ($data->isEmpty()) {
+            return response()->json(['message' => 'Aucun utilisateur trouvé'], 404);
+        }
+
+        return response()->json(['message' => 'Utilisateurs trouvés', 'data' => $data], 200);
+
     }
 
 }

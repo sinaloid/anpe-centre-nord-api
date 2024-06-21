@@ -14,6 +14,11 @@ use Illuminate\Support\Str;
 
 class OffreController extends Controller
 {
+    public function __construct()
+    {
+        // Appliquer le middleware d'authentification à toutes les méthodes sauf celles spécifiées
+        //$this->middleware('auth')->except(['index', 'show','offreByType']);
+    }
     /**
      * @OA\Get(
      *      tags={"Offres"},
@@ -266,5 +271,37 @@ class OffreController extends Controller
         $data->update(["is_deleted" => true]);
 
         return response()->json(['message' => 'Offre supprimée avec succès',"data" => $data]);
+    }
+
+    /**
+     * @OA\Get(
+     *      tags={"Offres"},
+     *      summary="Récupère la liste des offres en fonction d'un type",
+     *      description="Retourne la liste des offres d'un type",
+     *      path="/api/offres/type/{type}",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *      ),
+     *      @OA\Parameter(
+     *          name="type",
+     *          in="path",
+     *          description="type des offres à récupérer",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     * )
+     */
+    public function offresByType($type)
+    {
+        $data = Offre::where(["type"=> $type, "is_deleted" => false])->get();
+
+        if ($data->isEmpty()) {
+            return response()->json(['message' => 'Aucune offre trouvée'], 404);
+        }
+
+        return response()->json(['message' => 'Offres trouvées', 'data' => $data], 200);
     }
 }

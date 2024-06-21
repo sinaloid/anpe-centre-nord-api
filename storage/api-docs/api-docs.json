@@ -11,7 +11,7 @@
     },
     "servers": [
         {
-            "url": "https://anpe.fasodigi.com",
+            "url": "http://127.0.0.1:8000",
             "description": "Serveur test de l'API"
         }
     ],
@@ -692,6 +692,72 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Compte utilisateur bloqué ou débloqué"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Les données fournies ne sont pas valides."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/profile/{profile}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Retourne la liste des utlisateurs en fonctions d'un profile",
+                "description": "Retourne la liste des utilisateurs d'un profile",
+                "operationId": "dd73bcd450961d8ed658430e66ba0b65",
+                "parameters": [
+                    {
+                        "name": "profile",
+                        "in": "path",
+                        "description": "pofile des utilisateurs à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Données retrouvées"
                                         },
                                         "data": {
                                             "type": "object"
@@ -2525,6 +2591,32 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/offres/type/{type}": {
+            "get": {
+                "tags": [
+                    "Offres"
+                ],
+                "summary": "Récupère la liste des offres en fonction d'un type",
+                "description": "Retourne la liste des offres d'un type",
+                "operationId": "5eb77ac8b9094ec93d29d4c3c3c5e0df",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "description": "type des offres à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
             }
         },
         "/api/posts": {

@@ -46,6 +46,7 @@ Route::group(['middleware' => ['cors','json.response']], function () {
     Route::post('/login', [AuthController::class,'login']);
     Route::post('/verify-2fa', [AuthController::class,'verify2fa']);
     Route::post('/edit-password', [AuthController::class,'editPassword']);
+    Route::get('/offres/type/{type}', [OffreController::class,'offresByType']);
 
     Route::middleware(['auth:api'])->group(function () {
         Route::get('/users', [AuthController::class,'user']);
@@ -54,6 +55,8 @@ Route::group(['middleware' => ['cors','json.response']], function () {
         Route::post('/users/changePassword', [AuthController::class,'changePassword']);
         Route::post('/users/get', [AuthController::class,'userBy']);
         Route::post('/users/disable', [AuthController::class,'disable']);
+        Route::get('/users/profile/{profile}', [AuthController::class,'usersByProfile']);
+
 
         Route::post('/users/change-auth-2fa-statut', [AuthController::class,'changeAuth2FaStatus']);
         Route::post('/users/change-block-statut', [AuthController::class,'changeBlockStatus']);
