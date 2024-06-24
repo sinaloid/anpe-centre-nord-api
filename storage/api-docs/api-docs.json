@@ -11,7 +11,7 @@
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8000",
+            "url": "http://149.202.50.196",
             "description": "Serveur test de l'API"
         }
     ],
@@ -757,7 +757,7 @@
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Données retrouvées"
+                                            "example": "'Utilisateurs trouvés"
                                         },
                                         "data": {
                                             "type": "object"
@@ -2600,7 +2600,7 @@
                 ],
                 "summary": "Récupère la liste des offres en fonction d'un type",
                 "description": "Retourne la liste des offres d'un type",
-                "operationId": "5eb77ac8b9094ec93d29d4c3c3c5e0df",
+                "operationId": "48eea35e42e3039420b63610025e7098",
                 "parameters": [
                     {
                         "name": "type",
