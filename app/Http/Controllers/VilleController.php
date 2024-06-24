@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-class villeController extends Controller
+class VilleController extends Controller
 {
     /**
      * @OA\Get(
