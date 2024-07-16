@@ -46,7 +46,10 @@ Route::group(['middleware' => ['cors','json.response']], function () {
     Route::post('/login', [AuthController::class,'login']);
     Route::post('/verify-2fa', [AuthController::class,'verify2fa']);
     Route::post('/edit-password', [AuthController::class,'editPassword']);
-    Route::get('/offres/type/{type}', [OffreController::class,'offresByType']);
+
+    Route::get('/public/offres', [OffreController::class,'index']);
+    Route::get('/public/offres/{slug}', [OffreController::class,'show']);
+    Route::get('/public/offres/type/{type}', [OffreController::class,'offresByType']);
 
     Route::middleware(['auth:api'])->group(function () {
         Route::get('/users', [AuthController::class,'user']);
@@ -63,6 +66,7 @@ Route::group(['middleware' => ['cors','json.response']], function () {
 
 
         Route::get('/recruteur-offres-candidatures', [RecruteurOffreController::class,'getAllCadidature']);
+        Route::get('/offres/type/{type}', [OffreController::class,'offresByType']);
 
         Route::resources([
             'offres' => OffreController::class,

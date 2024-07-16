@@ -238,7 +238,7 @@ class AuthController extends Controller
         ])->first();
 
         if(!$user){
-            return response()->json(['message' => "Vous n'avez pas de compte sur notre plateforme"]);
+            return response()->json(['message' => "Vous n'avez pas de compte sur notre plateforme"],401);
         }
         $otpController = app(OtpController::class);
         $response = $otpController->generateOTP($request);

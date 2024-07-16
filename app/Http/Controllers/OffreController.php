@@ -17,7 +17,7 @@ class OffreController extends Controller
     public function __construct()
     {
         // Appliquer le middleware d'authentification à toutes les méthodes sauf celles spécifiées
-        //$this->middleware('auth')->except(['index', 'show','offreByType']);
+        //$this->middleware('auth:api')->except(['index', 'show','offreByType']);
     }
     /**
      * @OA\Get(
@@ -36,7 +36,7 @@ class OffreController extends Controller
      */
     public function index()
     {
-        $data = Offre::where("is_deleted",false)->get();
+        $data = Offre::where("is_deleted",false)->paginate(10);
 
         if ($data->isEmpty()) {
             return response()->json(['message' => 'Aucune offre trouvée'], 404);
@@ -85,8 +85,19 @@ class OffreController extends Controller
         $validator = Validator::make($request->all(), [
             'label' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'description' => 'nullable|string|max:10000',
-
+            'entreprise' => 'nullable|string|max:255',
+            'type_contrat' => 'nullable|string|max:255',
+            'niveau_etude' => 'nullable|string|max:255',
+            'niveau_experience' => 'nullable|string|max:255',
+            'salaire' => 'nullable|string|max:255',
+            'nombre_de_poste' => 'nullable|string|max:255',
+            'date_debut' => 'nullable|string|max:255',
+            'date_limite' => 'nullable|string|max:255',
+            'region' => 'nullable|string|max:255',
+            'ville' => 'nullable|string|max:255',
+            'longitude' => 'nullable|string|max:255',
+            'latitude' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -97,6 +108,18 @@ class OffreController extends Controller
         $data = Offre::create([
             'label' => $request->input('label'),
             'type' => $request->input('type'),
+            'entreprise' => $request->input('entreprise'),
+            'type_contrat' => $request->input('type_contrat'),
+            'niveau_etude' => $request->input('niveau_etude'),
+            'niveau_experience' => $request->input('niveau_experience'),
+            'nombre_de_poste' => $request->input('nombre_de_poste'),
+            'salaire' => $request->input('salaire'),
+            'date_debut' => $request->input('date_debut'),
+            'date_limite' => $request->input('date_limite'),
+            'region' => $request->input('region'),
+            'ville' => $request->input('ville'),
+            'longitude' => $request->input('longitude'),
+            'latitude' => $request->input('latitude'),
             'description' => $request->input('description'),
             'slug' => Str::random(10),
         ]);
@@ -201,8 +224,19 @@ class OffreController extends Controller
         $validator = Validator::make($request->all(), [
             'label' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'description' => 'nullable|string|max:10000',
-
+            'entreprise' => 'nullable|string|max:255',
+            'type_contrat' => 'nullable|string|max:255',
+            'niveau_etude' => 'nullable|string|max:255',
+            'niveau_experience' => 'nullable|string|max:255',
+            'salaire' => 'nullable|string|max:255',
+            'nombre_de_poste' => 'nullable|string|max:255',
+            'date_debut' => 'nullable|string|max:255',
+            'date_limite' => 'nullable|string|max:255',
+            'region' => 'nullable|string|max:255',
+            'ville' => 'nullable|string|max:255',
+            'longitude' => 'nullable|string|max:255',
+            'latitude' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -218,6 +252,18 @@ class OffreController extends Controller
         $data->update([
             'label' => $request->input('label'),
             'type' => $request->input('type'),
+            'entreprise' => $request->input('entreprise'),
+            'type_contrat' => $request->input('type_contrat'),
+            'niveau_etude' => $request->input('niveau_etude'),
+            'niveau_experience' => $request->input('niveau_experience'),
+            'nombre_de_poste' => $request->input('nombre_de_poste'),
+            'salaire' => $request->input('salaire'),
+            'date_debut' => $request->input('date_debut'),
+            'date_limite' => $request->input('date_limite'),
+            'region' => $request->input('region'),
+            'ville' => $request->input('ville'),
+            'longitude' => $request->input('longitude'),
+            'latitude' => $request->input('latitude'),
             'description' => $request->input('description'),
         ]);
 
@@ -296,7 +342,7 @@ class OffreController extends Controller
      */
     public function offresByType($type)
     {
-        $data = Offre::where(["type"=> $type, "is_deleted" => false])->get();
+        $data = Offre::where(["type"=> $type, "is_deleted" => false])->paginate(10);
 
         if ($data->isEmpty()) {
             return response()->json(['message' => 'Aucune offre trouvée'], 404);

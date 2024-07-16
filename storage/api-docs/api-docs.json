@@ -6143,7 +6143,7 @@
                 ],
                 "summary": "Liste des villes",
                 "description": "Retourne la liste des villes",
-                "operationId": "1cde95adfa787b3759c6e5ada539830a",
+                "operationId": "d9ae318b356d4b342e7c93f3b8d8db8f",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -6161,7 +6161,7 @@
                 ],
                 "summary": "Création d'une ville",
                 "description": "Crée une nouvelle ville et retourne la ville créée",
-                "operationId": "187f5ca56d2c699f4950eb6848b2651c",
+                "operationId": "0d96d0e136b588480297e25b8f8f028a",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -6239,7 +6239,7 @@
                 ],
                 "summary": "Récupère une ville par son slug",
                 "description": "Retourne une ville",
-                "operationId": "ede94f6bd11af18a985b4d768a020dce",
+                "operationId": "636e2c38dcdbf81f7f05fa6c7fcb6e3d",
                 "parameters": [
                     {
                         "name": "slug",
@@ -6268,7 +6268,7 @@
                 ],
                 "summary": "Modification d'un ville",
                 "description": "Modifie une ville et retourne la ville modifiée",
-                "operationId": "4b7f60cfd46f20f9e9086a9bc6f248d3",
+                "operationId": "9a524195d540e9eb0bed971d46ca1e89",
                 "parameters": [
                     {
                         "name": "slug",
@@ -6374,7 +6374,7 @@
                 ],
                 "summary": "Supprime une ville par son slug",
                 "description": "Retourne la ville supprimée",
-                "operationId": "eccf0c6755ffb2d6d90243752aa05e60",
+                "operationId": "d4ae2676bb3014798a715d8e7fccc259",
                 "parameters": [
                     {
                         "name": "slug",
