@@ -26,7 +26,11 @@ class UserOffreCandidature extends Model
     public function candidature(){
         return $this->belongsTo(Candidature::class);
     }
-    
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
 
 
 }

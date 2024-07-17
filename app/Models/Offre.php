@@ -29,6 +29,8 @@ class Offre extends Model
         "ville_id",
         "longitude",
         "latitude",
+        "pieces_jointes",
+        "etat",
         "description",
         "slug",
         "is_deleted",

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Candidature;
 use App\Models\Offre;
 use App\Models\User;
+use App\Models\RessourceCandidature;
 use App\Models\UserOffreCandidature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -32,7 +33,36 @@ class CandidatureController extends Controller
      */
     public function index()
     {
-        $data = Candidature::where("is_deleted",false)->get();
+        //$data = Candidature::where("is_deleted",false)->paginate(10);
+
+        $data = Candidature::where([
+            "is_deleted" => false //UserOffreCandidature
+        ])->with(
+            [
+                'user_offre_candidature' => function ($query) {
+                    // Ajoutez des conditions sur la relation 'publications' ici si nécessaire
+                    $query->where([
+                        'is_deleted' => false,
+                        'type' => "CANDIDATURE",
+                    ]);//->whereNotNull('offre_id');
+                },
+                'user_offre_candidature.user' => function ($query) {
+                    // Ajoutez des conditions sur la relation 'commentaire' ici si nécessaire
+                    $query->where('is_deleted', false);
+                },
+                'user_offre_candidature.offre' => function ($query) {
+                    // Ajoutez des conditions sur la relation 'commentaire' ici si nécessaire
+                    $query->where([
+                        'is_deleted' => false,
+                    ]);
+                },
+                "ressource_candidatures" => function($query){
+                        $query->where([
+                            'is_deleted' => false,
+                        ]);
+                    }
+            ]
+        )->paginate(10);
 
         if ($data->isEmpty()) {
             return response()->json(['message' => 'Aucune candidature trouvée'], 404);
@@ -80,10 +110,11 @@ class CandidatureController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'label' => 'required|string|max:255',
-            'etat' => 'required|string|max:255',
+            //'label' => 'required|string|max:255',
+            //'etat' => 'required|string|max:255',
             'offre' => 'required|string|max:10',
-            'description' => 'nullable|string|max:10000',
+            //'description' => 'nullable|string|max:10000',
+            'files.*' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
 
         ]);
 
@@ -98,11 +129,29 @@ class CandidatureController extends Controller
         }
 
         $data = Candidature::create([
-            'label' => $request->input('label'),
-            'etat' => $request->input('etat'),
-            'description' => $request->input('description'),
+            'label' => $offre->label,
+            'etat' => "EN_COURS",
+            'description' => $offre->label,
             'slug' => Str::random(10),
         ]);
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                //$path = $file->store('uploads');
+                //$filePaths[] = $path;
+                $newFileName = Str::random(40) . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('candidatures', $newFileName);
+                // Enregistrer le fichier dans la base de données
+                RessourceCandidature::create([
+                    'original_name' => $file->getClientOriginalName(),
+                    'name' => $newFileName,
+                    'candidature_id' => $data->id,
+                    'url' => Storage::url($path),
+                    'slug' => Str::random(10),
+                ]);
+
+            }
+        }
 
         UserOffreCandidature::create([
             'user_id' => Auth::user()->id,
@@ -275,5 +324,31 @@ class CandidatureController extends Controller
         $data->update(["is_deleted" => true]);
 
         return response()->json(['message' => 'Candidature supprimée avec succès',"data" => $data]);
+    }
+
+
+    public function getFile($file)
+    {
+        $ressource = RessourceCandidature::where('name', $file)->first();
+
+        $path = storage_path('app/candidatureS/' . $file);
+
+        if (!File::exists($path)) {
+            abort(404);
+        }
+
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        //$response->header("Content-Type", $type);
+        return response()->header("Content-Type", $type)->json(['error' => 'fichier trouvé'], 200);
+
+        return $response;
+
+
+        if ($ressource && Storage::exists("candidatures/$file")) {
+            return Storage::download("candidatures/$file");
+        }
+        return response()->json(['error' => 'Aucun fichier trouvé'], 404);
     }
 }

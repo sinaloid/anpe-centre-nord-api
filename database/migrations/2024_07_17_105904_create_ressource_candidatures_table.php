@@ -13,15 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('ressource_candidatures', function (Blueprint $table) {
             $table->id();
-            $table->string("titre");
-            $table->string("type");
-            $table->string("categorie")->nullable();
-            $table->longtext("long_description")->nullable();
-            $table->longtext("description")->nullable();
+            $table->string("original_name");
+            $table->string("name");
+            $table->string("url");
             $table->string("slug");
             $table->boolean('is_deleted')->default(false);
+            
+            $table->unsignedBigInteger('candidature_id');
+            $table->foreign('candidature_id')
+                    ->references('id')
+                    ->on('candidatures')
+                    ->onDelete('cascade')
+                    ->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -33,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('ressource_candidatures');
     }
 };

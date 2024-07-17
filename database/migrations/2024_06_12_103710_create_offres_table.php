@@ -41,6 +41,8 @@ return new class extends Migration
             $table->string("ville_id")->nullable();
             $table->string("longitude")->nullable();
             $table->string("latitude")->nullable();
+            $table->string("pieces_jointes")->nullable();
+            $table->string("etat")->nullable();
 
             $table->longtext("description")->nullable();
             $table->string("slug");

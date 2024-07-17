@@ -12,6 +12,8 @@ class Post extends Model
     protected $fillable = [
         "titre",
         "type",
+        "categorie",
+        "long_description",
         "description",
         "slug",
         "is_deleted",

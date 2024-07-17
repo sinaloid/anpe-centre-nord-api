@@ -15,4 +15,14 @@ class Candidature extends Model
         "slug",
         "is_deleted",
     ];
+
+    public function user_offre_candidature(){
+
+        return $this->hasOne(UserOffreCandidature::class);
+    }
+
+    public function ressource_candidatures(){
+
+        return $this->hasMany(RessourceCandidature::class);
+    }
 }

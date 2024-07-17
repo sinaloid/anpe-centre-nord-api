@@ -97,6 +97,8 @@ class OffreController extends Controller
             'ville' => 'nullable|string|max:255',
             'longitude' => 'nullable|string|max:255',
             'latitude' => 'nullable|string|max:255',
+            'peices_jointes' => 'nullable|string|max:255',
+            'etat' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);
 
@@ -120,6 +122,8 @@ class OffreController extends Controller
             'ville' => $request->input('ville'),
             'longitude' => $request->input('longitude'),
             'latitude' => $request->input('latitude'),
+            'etat' => "EN_ATTENTE",
+            'pieces_jointes' => $request->input('pieces_jointes'),
             'description' => $request->input('description'),
             'slug' => Str::random(10),
         ]);
@@ -236,8 +240,11 @@ class OffreController extends Controller
             'ville' => 'nullable|string|max:255',
             'longitude' => 'nullable|string|max:255',
             'latitude' => 'nullable|string|max:255',
+            'pieces_jointes' => 'nullable|string|max:255',
+            'etat' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);
+
 
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
@@ -264,6 +271,8 @@ class OffreController extends Controller
             'ville' => $request->input('ville'),
             'longitude' => $request->input('longitude'),
             'latitude' => $request->input('latitude'),
+            'etat' => $request->input('etat'),
+            'pieces_jointes' => $request->input('pieces_jointes'),
             'description' => $request->input('description'),
         ]);
 

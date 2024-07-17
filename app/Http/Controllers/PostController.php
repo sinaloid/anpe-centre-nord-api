@@ -31,7 +31,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $data = Post::where("is_deleted",false)->get();
+        $data = Post::where("is_deleted",false)->paginate(10);
 
         if ($data->isEmpty()) {
             return response()->json(['message' => 'Aucun post trouvé'], 404);
@@ -80,9 +80,11 @@ class PostController extends Controller
         $validator = Validator::make($request->all(), [
             'titre' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'description' => 'nullable|string|max:10000',
-
+            'categorie' => 'required|string|max:255',
+            'description' => 'required|string|max:500',
+            'long_description' => 'required|string',
         ]);
+
 
         if ($validator->fails()) {
             return response(['errors' => $validator->errors()->all()], 422);
@@ -92,9 +94,13 @@ class PostController extends Controller
         $data = Post::create([
             'titre' => $request->input('titre'),
             'type' => $request->input('type'),
+            'categorie' => $request->input('categorie'),
+            'long_description' => $request->input('long_description'),
             'description' => $request->input('description'),
             'slug' => Str::random(10),
         ]);
+
+
 
         Publication::create([
             'user_id' => Auth::user()->id,
@@ -226,7 +232,9 @@ class PostController extends Controller
         $validator = Validator::make($request->all(), [
             'titre' => 'required|string|max:255',
             'type' => 'required|string|max:255',
-            'description' => 'nullable|string|max:10000',
+            'categorie' => 'required|string|max:255',
+            'description' => 'required|string|max:500',
+            'long_description' => 'required|string',
 
         ]);
 
@@ -243,6 +251,8 @@ class PostController extends Controller
         $data->update([
             'titre' => $request->input('titre'),
             'type' => $request->input('type'),
+            'categorie' => $request->input('categorie'),
+            'long_description' => $request->input('long_description'),
             'description' => $request->input('description'),
         ]);
 
@@ -296,5 +306,38 @@ class PostController extends Controller
         $data->update(["is_deleted" => true]);
 
         return response()->json(['message' => 'post supprimé avec succès',"data" => $data]);
+    }
+
+
+    /**
+     * @OA\Get(
+     *      tags={"Posts"},
+     *      summary="Récupère la liste des posts en fonction d'un type",
+     *      description="Retourne la liste des posts d'un type",
+     *      path="/api/posts/type/{type}",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *      ),
+     *      @OA\Parameter(
+     *          name="type",
+     *          in="path",
+     *          description="type des posts à récupérer",
+     *          required=true,
+     *          @OA\Schema(
+     *              type="string"
+     *          )
+     *      ),
+     * )
+     */
+    public function postByType($type)
+    {
+        $data = Post::where(["type"=> $type, "is_deleted" => false])->paginate(10);
+
+        if ($data->isEmpty()) {
+            return response()->json(['message' => 'Aucun post trouvé'], 404);
+        }
+
+        return response()->json(['message' => 'Posts trouvés', 'data' => $data], 200);
     }
 }

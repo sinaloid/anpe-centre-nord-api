@@ -51,6 +51,10 @@ Route::group(['middleware' => ['cors','json.response']], function () {
     Route::get('/public/offres/{slug}', [OffreController::class,'show']);
     Route::get('/public/offres/type/{type}', [OffreController::class,'offresByType']);
 
+    Route::get('/public/posts', [PostController::class,'index']);
+    Route::get('/public/posts/{slug}', [PostController::class,'show']);
+    Route::get('/public/posts/type/{type}', [PostController::class,'postByType']);
+
     Route::middleware(['auth:api'])->group(function () {
         Route::get('/users', [AuthController::class,'user']);
         Route::get('/users/auth', [AuthController::class,'userAuth']);
@@ -67,6 +71,10 @@ Route::group(['middleware' => ['cors','json.response']], function () {
 
         Route::get('/recruteur-offres-candidatures', [RecruteurOffreController::class,'getAllCadidature']);
         Route::get('/offres/type/{type}', [OffreController::class,'offresByType']);
+
+        Route::get('/posts/type/{type}', [PostController::class,'postByType']);
+        Route::get('/candidatures/fichiers/{name}', [CandidatureController::class,'getFile']);
+
 
         Route::resources([
             'offres' => OffreController::class,
