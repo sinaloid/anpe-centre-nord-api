@@ -48,7 +48,7 @@ class TwoFactorCode extends Notification
                     ->line('Votre code de vérification à deux facteurs est : ' . $notifiable->two_factor_code)
                     ->line('Le code expirera dans 10 minutes.')
                     ->line('Si vous n\'avez pas demandé ce code, veuillez ignorer cet email.')
-                    ->action('Vérifiez votre compte', 'https://anpe.netlify.app/validation-du-code-a-2-facteurs/'.$notifiable->slug.'/'.$notifiable->two_factor_code);
+                    ->action('Vérifiez votre compte', 'https://anpebf.com/validation-du-code-a-2-facteurs/'.$notifiable->slug.'/'.$notifiable->two_factor_code);
                     //->action('Vérifiez votre compte', url('/validation-du-code-otp/'.$notifiable->slug.'/'.$notifiable->two_factor_code));
     }
 
